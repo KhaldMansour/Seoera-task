@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get("/", function(){
+    return view("welcome");
+ })->name('home');
+
 Route::group(['namespace' => 'App\Http\Controllers\Admin'], function ($router) {
 
     Route::group(['prefix' => 'admin'] , function ($router) {
@@ -21,11 +25,11 @@ Route::group(['namespace' => 'App\Http\Controllers\Admin'], function ($router) {
         
         Route::post('register', 'AdminController@register')->name('admins.save');
         
-        Route::get('login', 'AdminController@loginForm');
+        Route::get('login', 'AdminController@loginForm')->name('admins.loginform');
         
         Route::post('login', 'AdminController@login')->name('admins.login');
 
-        Route::post('logout', 'AdminController@logout')->name('admins.logout');
+        Route::get('logout', 'AdminController@logout')->name('admins.logout');
         
         Route::get('home', 'AdminController@index')->name('admins.index');
 
@@ -46,11 +50,11 @@ Route::group(['namespace' => 'App\Http\Controllers'], function ($router) {
 
         Route::post('register', 'UserController@register')->name('users.save');
 
-        Route::get('login', 'UserController@loginForm');
+        Route::get('login', 'UserController@loginForm')->name('users.loginform');
 
         Route::post('login', 'UserController@login')->name('users.login');
 
-        Route::post('logout', 'UserController@logout')->name('logout');
+        Route::get('logout', 'UserController@logout')->name('users.logout');
 
         Route::get('home', 'UserController@index')->name('users.index');
 

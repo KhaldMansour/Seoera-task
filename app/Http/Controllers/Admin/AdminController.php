@@ -8,6 +8,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Events\Chat;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 
 
@@ -98,6 +99,6 @@ class AdminController extends Controller
 
         Auth::guard('admin')->logout();
   
-        return Auth::guard('admin')->user();
+        return redirect()->route('home');
     }
 }

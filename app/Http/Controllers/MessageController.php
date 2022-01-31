@@ -17,7 +17,7 @@ class MessageController extends Controller
     {
         $this->guard = "user";
 
-        auth()->setDefaultDriver($this->guard);
+        $this->middleware('auth:' . $this->guard , ['except' => ['login', 'loginForm' , 'register' , 'create' ]]);
     }
 
 

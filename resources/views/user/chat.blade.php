@@ -43,6 +43,32 @@ if ($receiver_entity == "user")
     </head>
 
     <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">{{ config('app.name', 'Laravel') }}</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+             @if(auth('user')->user())
+            <li class="nav-item active">
+                <a class="nav-link" href="{{route('users.index')}}">Home <span class="sr-only">({{auth('user')->user()->name}})</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('users.logout')}}">Logout</a>
+            </li>
+            @else
+            <li class="nav-item active">
+                <a class="nav-link" href="{{route('users.create')}}">Register <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{{route('users.loginform')}}">Login</a>
+            </li>
+            @endif
+            </form>
+        </div>
+        </nav>
         <div class="container">
         <div class="row clearfix">
             <div class="col-lg-12">
@@ -143,7 +169,7 @@ $("#send-form").submit(function(e){
     $("#message").val('');
 });
 
-window.Echo.channel('messages.' + {{ $chat_room->id }}).listen('Chat', (e) =>{
+window.Echo.private('messages.' + {{ $chat_room->id }}).listen('Chat', (e) =>{
 
     if (e.message.sender == "user" && e.message.sender_id == {{ $user->id }})
         {

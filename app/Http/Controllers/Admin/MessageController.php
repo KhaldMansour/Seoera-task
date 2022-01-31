@@ -19,7 +19,7 @@ class MessageController extends Controller
     {
         $this->guard = "admin";
 
-        auth()->setDefaultDriver($this->guard);
+        $this->middleware('auth:' . $this->guard);
     }
 
     public function send(Request $request)

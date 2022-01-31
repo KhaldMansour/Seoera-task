@@ -91,6 +91,6 @@ class UserController extends Controller
 
         Auth::guard('user')->logout();
   
-        return Auth::guard('user')->user();
+        return redirect()->route('home');
     }
 }
