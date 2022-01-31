@@ -13,24 +13,54 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Auth::routes();
-
-Route::group(['namespace' => 'App\Http\Controllers'], function ($router) {
+Route::group(['namespace' => 'App\Http\Controllers\Admin'], function ($router) {
 
     Route::group(['prefix' => 'admin'] , function ($router) {
 
-        Route::get('register', 'AdminController@create')->name('admin.create');
+        Route::get('register', 'AdminController@create')->name('admins.create');
+        
+        Route::post('register', 'AdminController@register')->name('admins.save');
+        
+        Route::get('login', 'AdminController@loginForm');
+        
+        Route::post('login', 'AdminController@login')->name('admins.login');
 
-        Route::post('register', 'AdminController@register')->name('admin.save');
+        Route::post('logout', 'AdminController@logout')->name('admins.logout');
+        
+        Route::get('home', 'AdminController@index')->name('admins.index');
+
+        Route::post('send-message', 'MessageController@send')->name('admin.sendmessage');
+
+        Route::post('chat', 'ChatRoomController@findChatRoom')->name('chat');
+
+        Route::get('chat-room/{id}', 'MessageController@getMessages')->name('admin.getmessages');
 
     });
 });
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::group(['namespace' => 'App\Http\Controllers'], function ($router) {
+
+    Route::group(['prefix' => 'user'] , function ($router) {
+
+        Route::get('register', 'UserController@create')->name('users.create');
+
+        Route::post('register', 'UserController@register')->name('users.save');
+
+        Route::get('login', 'UserController@loginForm');
+
+        Route::post('login', 'UserController@login')->name('users.login');
+
+        Route::post('logout', 'UserController@logout')->name('logout');
+
+        Route::get('home', 'UserController@index')->name('users.index');
+
+        Route::post('chat', 'ChatRoomController@findChatRoom')->name('user.chat');
+
+        Route::post('send-message', 'MessageController@send')->name('user.sendmessage');
+
+        Route::get('chat-room/{id}', 'MessageController@getMessages')->name('user.getmessages');
+    });
+});
 
 
 

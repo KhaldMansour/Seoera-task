@@ -1,25 +1,26 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use App\Events\Chat;
 use App\Models\Message;
-use App\Models\User;
+use App\Models\Admin;
 use App\Models\ChatRoom;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+
 class MessageController extends Controller
 {
+
     public $guard;
 
     public function __construct()
     {
-        $this->guard = "user";
+        $this->guard = "admin";
 
         auth()->setDefaultDriver($this->guard);
     }
-
 
     public function send(Request $request)
     {
@@ -36,16 +37,16 @@ class MessageController extends Controller
 
     public function getMessages($chat_room_id)
     {
-        $user = auth('user')->user();
+        $admin = auth('admin')->user();
 
         $chat_room = ChatRoom::findOrFail($chat_room_id);
         
-        if ( ($chat_room->first_entity == "user" && $chat_room->first_entity_id == $user->id) 
-        || ($chat_room->second_entity == "user" && $chat_room->second_entity_id == $user->id) )
+        if ( ($chat_room->first_entity == "admin" && $chat_room->first_entity_id == $admin->id) 
+        || ($chat_room->second_entity == "admin" && $chat_room->second_entity_id == $admin->id) )
         {
             $messages = $chat_room->messages;
 
-            return view('user.chat', [
+            return view('admin.chat', [
                 'chat_room' => $chat_room,
                 'messages' => $messages
                 ]);
@@ -55,4 +56,3 @@ class MessageController extends Controller
         } 
     }
 }
-

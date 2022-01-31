@@ -20,6 +20,7 @@ class CreateMessagesTable extends Migration
             $table->bigInteger('sender_id');
             $table->text('receiver');
             $table->bigInteger('receiver_id');
+            $table->bigInteger('chat_room_id');
             $table->timestamps();
         });
     }

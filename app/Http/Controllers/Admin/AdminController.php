@@ -1,43 +1,53 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
 use Auth;
 use Session;
 use App\Models\Admin;
+use App\Models\User;
+use App\Events\Chat;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 
 
 class AdminController extends Controller
 {
+    public $guard;
+
+    public function __construct()
+    {
+        $this->guard = "admin";
+
+        $this->middleware('auth:' . $this->guard , ['except' => ['login', 'loginForm' , 'register' , 'create' ]]);
+    }
+    
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {
-        //
+    {   
+        $admins = Admin::all();
+
+        $users = User::all();
+
+        return view('admin.home', [
+            'admins' => $admins,
+            'users' => $users
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
         return view('admin.auth.register');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-
+    public function loginForm()
+    {
+        return view('admin.auth.login');
+    }
 
     public function register(Request $request)
     {  
@@ -73,8 +83,10 @@ class AdminController extends Controller
         ]);
    
         $credentials = $request->only('email', 'password');
+
         if (Auth::guard('admin')->attempt($credentials)) {
-            return Auth::guard('admin')->user();
+
+            return \Redirect::route('admins.index');
         }
   
         return redirect("login")->withSuccess('Login details are not valid');
@@ -87,51 +99,5 @@ class AdminController extends Controller
         Auth::guard('admin')->logout();
   
         return Auth::guard('admin')->user();
-    }
-
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Admin $admin)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Admin  $admin
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Admin $admin)
-    {
-        //
     }
 }
