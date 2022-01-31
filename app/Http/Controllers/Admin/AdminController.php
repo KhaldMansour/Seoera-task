@@ -90,7 +90,7 @@ class AdminController extends Controller
             return \Redirect::route('admins.index');
         }
   
-        return redirect("login")->withSuccess('Login details are not valid');
+        return redirect()->back();
     }
 
     public function logout() 

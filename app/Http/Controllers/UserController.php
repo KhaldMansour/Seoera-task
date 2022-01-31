@@ -82,7 +82,7 @@ class UserController extends Controller
             return \Redirect::route('users.index');
         }
   
-        return redirect("login")->withSuccess('Login details are not valid');
+        return redirect()->back();
     }
 
     public function logout() 
